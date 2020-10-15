@@ -3,7 +3,7 @@ import java.lang.*;
 import java.math.*;
 import java.util.PriorityQueue;
 
-class proceso implements Comparable<proceso>{
+class proceso{
 	String nombre;
 	int id;
 	int instr;
@@ -38,14 +38,6 @@ class proceso implements Comparable<proceso>{
 	public void excute_proc(){
 		this.instr=this.instr-5;
 	}
-
-	public int compareTo(proceso process){
-		if(this.get_id() > process.get_id()){
-			return 1;
-		}
-		return 0;
-	}
-
 
 
 }
