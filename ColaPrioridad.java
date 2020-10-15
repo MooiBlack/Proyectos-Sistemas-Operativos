@@ -23,13 +23,13 @@ public class ColaPrioridad{
 	int cant_memoria; /* Cantidad de memoria*/
 	int cant_mem_temp;
 	int cant_instr_proc; /*	Cantidad de instrucciones*/
+	int id_temp;
 
-
+	public ColaPrioridad(int mem){
+		this.cant_memoria=mem;
+	}
 	public void Imprimir(){
 		System.out.println(cant_memoria);
-	}
-	public ColaPrioridad(int mem){
-		this.cant_memoria=cant_memoria;
 	}
 	public int MemAleatoria(){
 		int mem_aleatoria;
@@ -43,11 +43,14 @@ public class ColaPrioridad{
 		cant_instr_proc = r.nextInt(30-10+1)+10;
 		return cant_instr_proc;
 	}
-
+	public int GeneraID(){
+		id_temp=id_temp+1;
+		return id_temp;
+	}
 	/*---------------------------------------------------------*/
 	public static void main(String args[]){
 
-	PriorityQueue<proceso> cola = new PriorityQueue<>();
+	PriorityQueue<proceso> cola = new PriorityQueue<proceso>();
 	ColaPrioridad memoria = new ColaPrioridad(2048);
 	
 		int option;
@@ -75,24 +78,36 @@ public class ColaPrioridad{
 					Scanner nombre = new Scanner(System.in);
 					nombre_proc=nombre.nextLine();
 					memoria.cant_mem_temp=(int) Math.pow(2, memoria.MemAleatoria());
-					if (memoria.cant_mem_temp+memoria.cont_memoria > 2048){
+					if (memoria.cant_mem_temp+memoria.cont_memoria > memoria.cant_memoria){
 						System.out.println(ANSI_RED+"La memoria está llena"+ANSI_RESET);
 					}
-					cola.add(new proceso(nombre_proc,1,memoria.InstrAleatoria(),memoria.cant_mem_temp));
+					cola.add(new proceso(nombre_proc,memoria.GeneraID(),memoria.InstrAleatoria(),memoria.cant_mem_temp));
 					memoria.cont_memoria=memoria.cont_memoria+memoria.cant_mem_temp;
 					break;
 
 			case 2: System.out.println(ANSI_GREEN+"Procesos listos: "+cola.size()+ANSI_RESET);
 					break;
 
-			case 3: 
+			case 3: int lim = cola.size();
+					proceso[] procesos = new proceso[lim];
+					Object[] arreglo_ayuda = cola.toArray(procesos);
+						
+					for(int i=0; i<lim; i++){
+						System.out.println(ANSI_GREEN+"ID: "+procesos[i].id+"...."+procesos[i].nombre+ANSI_RESET);
+					}
 					break;
 
-			case 4:	proceso proceso_temporal = cola.peek();
-					proceso_temporal.instr=proceso_temporal.instr-5;
-					cola.add(cola.poll());
+			case 4:	//proceso proceso_temporal = cola.peek();
+					//proceso_temporal.instr=proceso_temporal.instr-5;
+					int instr_temp;
+					(cola.peek()).instr=(cola.peek()).instr-5;
+					instr_temp = (cola.peek()).instr;
+					proceso proceso_temporal_2 = cola.poll();
+					proceso_temporal_2.id=proceso_temporal_2.id+cola.size();
+					cola.add(proceso_temporal_2);
+					//cola.add(cola.poll());
 					System.out.println(ANSI_GREEN+"Procesos listos: "+cola.size()+ANSI_RESET);
-					System.out.println(ANSI_GREEN+"instrucciones: "+proceso_temporal.instr+ANSI_RESET);
+					System.out.println(ANSI_GREEN+"instrucciones: "+instr_temp+ANSI_RESET);
 					break;
 
 			case 5: System.out.println(ANSI_GREEN+"Proceso actual: "+'\n'+"Nombre: "+(cola.peek()).nombre+'\n'+"ID: "+(cola.peek()).id+'\n'+"N° instrucciones: "+(cola.peek()).instr+'\n'+"Espacio memoria: "+(cola.peek()).espacio_mem+ANSI_RESET);

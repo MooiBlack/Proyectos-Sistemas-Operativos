@@ -27,6 +27,7 @@ class proceso implements Comparable<proceso>{
 	public int get_id(){
 		return id;
 	}
+
 	public int instr(){
 		return instr;
 	}
